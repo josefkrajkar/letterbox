@@ -2,7 +2,10 @@ const express = require('express');
 const app = express();
 const { createServer } = require('http');
 const server = createServer(express);
-const port = 80;
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
 const bodyParser = require('body-parser');
 const rooms = [];
 const {parse} = require('url');
