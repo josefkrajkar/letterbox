@@ -1,0 +1,23 @@
+{
+  "name": "letterbox",
+  "version": "1.0.0",
+  "description": "Backend for E2E encrypted chat room",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "encryption",
+    "cryptography",
+    "node",
+    "nodejs",
+    "chat"
+  ],
+  "author": "Josef Krajkář",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "uuid": "^8.3.2"
+  }
+}
