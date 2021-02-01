@@ -16,7 +16,8 @@ const server = express()
   .use(bodyParser.json())
   .use(cors())
 
-  .post('/api/createRoom', (req, res) => {
+  .post('/api/createRoom', cors(), (req, res) => {
+    console.log('creating room', req.body.name);
     const uuid = UUID.v4();
     rooms.push({
       id: uuid,
@@ -27,7 +28,8 @@ const server = express()
     res.json({uuid});
   })
 
-  .post('/api/enterRoom', (req, res) => {
+  .post('/api/enterRoom', cors(), (req, res) => {
+    console.log('entering room', req.body.name);
     const roomIndex = rooms.findIndex(item => item.name === req.body.name);
     if (roomIndex > -1 && req.body.pass === rooms[roomIndex].pass) {
       res.status(200);
@@ -38,7 +40,7 @@ const server = express()
     }
   })
 
-  .get('/ping', (req, res) => {
+  .get('/ping', cors(), (req, res) => {
     res.status(200);
     res.send('pong');
   })
@@ -47,8 +49,8 @@ const server = express()
     console.log(`> App listening at http://localhost:${port}`);
   });
 
-const { Server } = require('ws');
-const wss = new Server({ server });
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ server });
 
 wss.on('connection', function connection(ws, req) {
 
@@ -61,6 +63,8 @@ wss.on('connection', function connection(ws, req) {
       ws
     });
   }
+
+  // ws.on('close', () => console.log('Client disconnected'));
 
   ws.on('message', function incoming(data) {
     const msgParams = parse(req.url, true);
