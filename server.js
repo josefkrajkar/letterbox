@@ -64,16 +64,20 @@ wss.on('connection', function connection(ws, req) {
     });
   }
 
-  // ws.on('close', () => console.log('Client disconnected'));
-
   ws.on('message', function incoming(data) {
     const msgParams = parse(req.url, true);
     const roomIndex = rooms.findIndex(room => room.id === msgParams.query.uuid);
     if (roomIndex > -1) {
-      const arrayOfClients = clients.filter(client => client.id === msgParams.query.uuid && (client.ws !== ws && client.ws.readyState === WebSocket.OPEN));
+      const arrayOfClients = clients.filter(client => {
+        return client.id === msgParams.query.uuid && (client.ws !== ws && client.ws.readyState === WebSocket.OPEN)
+      });
       arrayOfClients.forEach(client => {
         client.ws.send(data);
       });
     }
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
   });
 });
